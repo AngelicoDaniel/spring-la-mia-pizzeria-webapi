@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{/fragments/resources :: head(pageTitle='Le pizze')}">
+</head>
+<body class="bg-dark text-light">
+<nav th:replace="~{/fragments/navbar :: navbar(current='pizzas')}"></nav>
+<div class="container">
+  <h1>Pizze</h1>
+  <hr>
+  <a class="btn btn-primary" th:href="@{/pizzas/create}">Crea nuova Pizza</a>
+  <hr>
+  <div>
+    <form method="GET" th:action="@{/pizzas}">
+      <div class="input-group">
+        <input class="form-control" name="keyword" placeholder="Search by name"
+               th:value="${searchInput}" type="search">
+        <button class="btn btn-outline-secondary" type="submit">
+          <i class="fa fa-search"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <th:block th:if="${#lists.isEmpty(pizzaList)}">
+    <p>Nessuna pizza presente.</p>
+  </th:block>
+
+  <table class="table table-dark table-striped" th:if="${pizzaList.size() > 0}">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Image</th>
+      <th>Price</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="pizza : ${pizzaList}">
+      <td th:text="${pizza.name}"></td>
+      <td th:text="${pizza.description}"></td>
+      <td><img id="pizza" alt="pizza-image" th:src="${pizza.image}" /></td>
+      <td th:text="${pizza.price + ' €'}"></td>
+      <td>
+        <a th:href="@{|/pizzas/${pizza.id}|}" class="btn btn-primary me-1"><i class="fa-solid fa-book"></i></a>
+      </td>
+      <td>
+        <a th:href="@{|/pizzas/edit/${pizza.id}|}" class="btn btn-primary me-1"><i class="fa-solid fa-pen-to-square"></i></a>
+      </td>
+      <td>
+        <form method="post" th:action="@{|/pizzas/delete/${pizza.id}|}">
+          <button class="btn btn-primary" type="submit"><i class="fa-solid fa-trash-can"></i></button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <!-- show message if the list is empty -->
+  <div class="alert alert-info" th:unless="${pizzaList.size() > 0}">
+    No results
+  </div>
+  </th:block>
+
+</div>
+</body>
+</html>

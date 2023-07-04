@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{/fragments/resources :: head(pageTitle='Pizza Detail')}">
+</head>
+<body>
+<nav th:replace="~{/fragments/navbar :: navbar(current='pizzas')}"></nav>
+<div class="container" th:object="${pizza}">
+
+    <section>
+        <h1 th:text="*{name}"></h1>
+        <h2 class="text-muted" th:text="|Description: *{description}|"></h2>
+        <hr>
+        <dl>
+            <dt>Price</dt>
+            <dd th:text="|*{price} €|"></dd>
+        </dl>
+    </section>
+
+    <section>
+        <h2>Special Offers</h2>
+
+        <a class="btn btn-primary my-2"
+           th:href="@{/offers/create(pizzaId=${pizza.id})}">Crea nuova offerta speciale</a>
+
+        <table class="table table-dark table-striped">
+            <thead>
+            <tr>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Title</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:if="${#lists.isEmpty(pizza.offers)}">
+                <tr>
+                    <td colspan="5">No special offers available for this pizza.</td>
+                </tr>
+            </th:block>
+            <th:block th:each="offer : ${pizza.offers}">
+                <tr th:object="${offer}">
+                    <td th:text="*{#temporals.format(startDate, 'dd/MM/yyyy')}"></td>
+                    <td th:text="*{#temporals.format(endDate, 'dd/MM/yyyy')}"></td>
+                    <td th:text="*{title}"></td>
+                    <td>
+                        <a class="btn btn-primary me-1"
+                           th:href="@{|/pizzas/edit/${id}|}"><i class="fa-solid fa-pen-to-square"></i></a>
+                    </td>
+                    <td>
+                        <form method="post" th:action="@{|/offers/delete/${id}|}">
+                            <button class="btn btn-primary" type="submit"><i class="fa-solid fa-trash-can"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </section>
+</div>
+</body>
+</html>
