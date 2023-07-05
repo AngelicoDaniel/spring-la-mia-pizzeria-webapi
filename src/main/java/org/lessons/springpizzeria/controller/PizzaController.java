@@ -5,6 +5,7 @@ import org.lessons.springpizzeria.messages.AlertMessage;
 import org.lessons.springpizzeria.messages.AlertMessageType;
 import org.lessons.springpizzeria.model.Pizza;
 import org.lessons.springpizzeria.repository.PizzaRepository;
+import org.lessons.springpizzeria.service.PizzaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,8 @@ import java.util.Optional;
 @RequestMapping("/pizzas")
 public class PizzaController {
 
+    @Autowired
+    PizzaService pizzaService;
     @Autowired
     private PizzaRepository pizzaRepository;
 

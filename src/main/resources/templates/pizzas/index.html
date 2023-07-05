@@ -1,66 +1,162 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{/fragments/resources :: head(pageTitle='Le pizze')}">
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head th:insert="~{/fragments/resources :: head(pageTitle='Le pizze')}">-->
+<!--</head>-->
+<!--<body class="bg-dark text-light">-->
+<!--<nav th:replace="~{/fragments/navbar :: navbar(current='pizzas')}"></nav>-->
+<!--<div class="container">-->
+<!--  <h1>Pizze</h1>-->
+<!--  <hr>-->
+<!--  <a class="btn btn-primary" th:href="@{/pizzas/create}">Crea nuova Pizza</a>-->
+<!--  <hr>-->
+<!--  <div>-->
+<!--    <form method="GET" th:action="@{/pizzas}">-->
+<!--      <div class="input-group">-->
+<!--        <input class="form-control" name="keyword" placeholder="Search by name"-->
+<!--               th:value="${searchInput}" type="search">-->
+<!--        <button class="btn btn-outline-secondary" type="submit">-->
+<!--          <i class="fa fa-search"></i>-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </form>-->
+<!--  </div>-->
+
+<!--  <th:block th:if="${#lists.isEmpty(pizzaList)}">-->
+<!--    <p>Nessuna pizza presente.</p>-->
+<!--  </th:block>-->
+
+<!--  <table class="table table-dark table-striped" th:if="${pizzaList.size() > 0}">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--      <th>Name</th>-->
+<!--      <th>Description</th>-->
+<!--      <th>Image</th>-->
+<!--      <th>Price</th>-->
+<!--      <th></th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr th:each="pizza : ${pizzaList}">-->
+<!--      <td th:text="${pizza.name}"></td>-->
+<!--      <td th:text="${pizza.description}"></td>-->
+<!--      <td><img id="pizza" alt="pizza-image" th:src="${pizza.image}" /></td>-->
+<!--      <td th:text="${pizza.price + ' €'}"></td>-->
+<!--      <td>-->
+<!--        <a th:href="@{|/pizzas/${pizza.id}|}" class="btn btn-primary me-1"><i class="fa-solid fa-book"></i></a>-->
+<!--      </td>-->
+<!--      <td>-->
+<!--        <a th:href="@{|/pizzas/edit/${pizza.id}|}" class="btn btn-primary me-1"><i class="fa-solid fa-pen-to-square"></i></a>-->
+<!--      </td>-->
+<!--      <td>-->
+<!--        <form method="post" th:action="@{|/pizzas/delete/${pizza.id}|}">-->
+<!--          <button class="btn btn-primary" type="submit"><i class="fa-solid fa-trash-can"></i></button>-->
+<!--        </form>-->
+<!--      </td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--  </table>-->
+<!--  &lt;!&ndash; show message if the list is empty &ndash;&gt;-->
+<!--  <div class="alert alert-info" th:unless="${pizzaList.size() > 0}">-->
+<!--    No results-->
+<!--  </div>-->
+<!--  </th:block>-->
+
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
+
+<!doctype html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{/fragments/resources :: head(pageTitle='Lista pizze')}">
 </head>
-<body class="bg-dark text-light">
-<nav th:replace="~{/fragments/navbar :: navbar(current='pizzas')}"></nav>
-<div class="container">
-  <h1>Pizze</h1>
-  <hr>
-  <a class="btn btn-primary" th:href="@{/pizzas/create}">Crea nuova Pizza</a>
-  <hr>
-  <div>
-    <form method="GET" th:action="@{/pizzas}">
-      <div class="input-group">
-        <input class="form-control" name="keyword" placeholder="Search by name"
-               th:value="${searchInput}" type="search">
-        <button class="btn btn-outline-secondary" type="submit">
-          <i class="fa fa-search"></i>
-        </button>
-      </div>
-    </form>
-  </div>
-
-  <th:block th:if="${#lists.isEmpty(pizzaList)}">
-    <p>Nessuna pizza presente.</p>
-  </th:block>
-
-  <table class="table table-dark table-striped" th:if="${pizzaList.size() > 0}">
-    <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Image</th>
-      <th>Price</th>
-      <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="pizza : ${pizzaList}">
-      <td th:text="${pizza.name}"></td>
-      <td th:text="${pizza.description}"></td>
-      <td><img id="pizza" alt="pizza-image" th:src="${pizza.image}" /></td>
-      <td th:text="${pizza.price + ' €'}"></td>
-      <td>
-        <a th:href="@{|/pizzas/${pizza.id}|}" class="btn btn-primary me-1"><i class="fa-solid fa-book"></i></a>
-      </td>
-      <td>
-        <a th:href="@{|/pizzas/edit/${pizza.id}|}" class="btn btn-primary me-1"><i class="fa-solid fa-pen-to-square"></i></a>
-      </td>
-      <td>
-        <form method="post" th:action="@{|/pizzas/delete/${pizza.id}|}">
-          <button class="btn btn-primary" type="submit"><i class="fa-solid fa-trash-can"></i></button>
+<body>
+<header>
+    <nav th:replace="~{/fragments/navbar :: navbar(current='pizzas')}"></nav>
+</header>
+<main class="container mb-3">
+    <!-- messaggio alert quando avviene un'azione -->
+    <div class="alert alert-dismissible fade show" role="alert" th:classAppend="${#strings.equalsIgnoreCase(message.type, 'SUCCESS')} ? 'alert-success' : 'alert-danger'"
+         th:if="${message != null}">
+        <span th:text="${message.message}"></span>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
+    </div>
+    <h1 class="fw-semibold text-danger mb-4">Elenco pizze</h1>
+    <div class="d-sm-flex align-items-center justify-content-between mb-3">
+        <a class="btn btn-primary fw-semibold mb-3 mb-sm-0" sec:authorize=
+                "hasAuthority('ADMIN')" th:href="@{/pizzas/create}"><i
+                class="fa-solid fa-plus me-1"></i> Crea nuova pizza</a>
+        <!-- form di ricerca -->
+        <form method="GET" th:action="@{/pizzas}">
+            <div class="input-group">
+                <input class="form-control shadow-none border-danger" name="q" placeholder="Cerca per nome"
+                       th:value="${searchInput}"
+                       type="search">
+                <button class="btn btn-outline-danger" type="submit"><i
+                        class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
         </form>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-  <!-- show message if the list is empty -->
-  <div class="alert alert-info" th:unless="${pizzaList.size() > 0}">
-    No results
-  </div>
-  </th:block>
-
-</div>
+    </div>
+    <!-- tabella lista pizze -->
+    <div th:if="${pizzaList.size() > 0}">
+        <table class="ms-table table table-striped table-responsive table-hover border-danger align-middle">
+            <thead class="border-bottom border-4 border-danger">
+            <tr>
+                <th>Nome</th>
+                <th class="d-none d-sm-table-cell col-md-6">Descrizione</th>
+                <th>Prezzo</th>
+                <th class="col-sm-4 col-lg-2">Azioni</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="pizza : ${pizzaList}">
+                <td class="pe-2 pe-sm-4" th:text="${pizza.name}"></td>
+                <td class="d-none d-sm-table-cell">
+                    <div class="truncate-text pe-2 pe-sm-4" th:text="${pizza.description}"></div>
+                </td>
+                <td class="pe-2 pe-sm-4" th:text="${pizza.price} + €"></td>
+                <td>
+                    <a class="btn btn-outline-info ms-white-hover my-1" th:href="@{|/pizzas/${pizza.id}|}">
+                        <i class="fa-solid fa-eye"></i>
+                    </a>
+                    <a class="btn btn-outline-warning ms-white-hover my-1" sec:authorize=
+                               "hasAuthority('ADMIN')"
+                       th:href="@{|/pizzas/edit/${pizza.id}|}">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </a>
+                    <!-- impedisco l'azione di eliminazione della pizza se ci sono delle offerte associate -->
+                    <form class="d-inline-block" method="post"
+                          sec:authorize=
+                                  "hasAuthority('ADMIN')" th:action="@{|/pizzas/delete/${pizza.id}|}" th:if="${pizza.offers.size == 0}">
+                        <button class="btn btn-outline-danger" type="submit"><i class="fa-solid fa-trash"></i></button>
+                    </form>
+                    <!-- mostro un pulsante senza funzionalità e disabilitato ai fini di una migliore user experience -->
+                    <button class="btn btn-outline-danger" disabled sec:authorize="hasAuthority('ADMIN')"
+                            th:unless="${pizza.offers.size == 0}" type="submit">
+                        <i class="fa-solid fa-trash"></i></button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- messaggio informativo se la lista pizze è vuota -->
+    <div class="alert alert-info fs-3" role="alert" th:unless="${pizzaList.size() > 0}">
+        La lista delle pizze è vuota!
+    </div>
+    <!-- link di paginazione -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination text-danger">
+            <li class="page-item">
+                <a class="page-link text-danger border-danger" th:href="@{/pizzas(page=${pageNumber - 1})}"
+                   th:if="${pizzasPage != null && pageNumber > 0}">Indietro</a>
+            </li>
+            <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, pizzasPage.getTotalPages() - 1)}">
+                <a class="page-link text-danger border-danger" th:href="@{/pizzas(page=${pageNumber})}"
+                   th:text="${pageNumber + 1}"></a>
+            </li>
+            <li class="page-item"><a class="page-link text-danger border-danger" href="#">Avanti</a></li>
+        </ul>
+    </nav>
+</main>
 </body>
 </html>

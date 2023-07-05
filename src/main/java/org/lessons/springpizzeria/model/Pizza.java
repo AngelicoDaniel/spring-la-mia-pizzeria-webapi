@@ -26,12 +26,12 @@ public class Pizza {
     @Size(max = 255, message = "Description must be at most 255 characters")
     private String description;
 
-//    @NotBlank(message = "Image URL is required")
-//    private String image;
+    @NotBlank(message = "Image URL is required")
+    private String image;
 
     @Lob
     @Column(length = 16777215)
-    private byte[] image;
+    private byte[] cover;
 
     @NotNull(message = "Price is required")
     @Positive(message = "Price must be a positive value")
@@ -74,12 +74,20 @@ public class Pizza {
         this.description = description;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
+    }
+
+    public byte[] getCover() {
+        return cover;
+    }
+
+    public void setCover(byte[] cover) {
+        this.cover = cover;
     }
 
     public BigDecimal getPrice() {
