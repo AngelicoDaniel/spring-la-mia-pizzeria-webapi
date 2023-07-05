@@ -18,14 +18,14 @@
             <label for="description">Descrizione</label>
             <textarea class="form-control" id="description" required th:field="*{description}"></textarea>
         </div>
-        <div class="form-group">
-            <label for="image">Immagine URL</label>
-            <input class="form-control" id="image" required th:field="*{image}">
-        </div>
         <!--        <div class="form-group">-->
-        <!--            <label for="image">Immagine</label>-->
-        <!--            <input class="form-control" id="image" th:field="*{image}" type="file">-->
+        <!--            <label for="image">Immagine URL</label>-->
+        <!--            <input class="form-control" id="image" required th:field="*{image}">-->
         <!--        </div>-->
+        <div class="form-group">
+            <label for="image">Immagine</label>
+            <input class="form-control" id="image" th:field="*{image}" type="file">
+        </div>
 
         <div class="form-group">
             <label for="price">Prezzo</label>
