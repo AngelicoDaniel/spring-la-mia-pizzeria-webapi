@@ -29,9 +29,14 @@ public class Pizza {
     @NotBlank(message = "Image URL is required")
     private String image;
 
+    @Lob
+    @Column(length = 16777215)
+    private byte[] coverImage;
+
     @NotNull(message = "Price is required")
     @Positive(message = "Price must be a positive value")
     private BigDecimal price;
+
 
     @JsonIgnore
     @OneToMany(mappedBy = "pizza", cascade = {CascadeType.REMOVE})
