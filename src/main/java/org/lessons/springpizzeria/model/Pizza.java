@@ -26,12 +26,12 @@ public class Pizza {
     @Size(max = 255, message = "Description must be at most 255 characters")
     private String description;
 
-    @NotBlank(message = "Image URL is required")
-    private String image;
+//    @NotBlank(message = "Image URL is required")
+//    private String image;
 
     @Lob
     @Column(length = 16777215)
-    private byte[] coverImage;
+    private byte[] image;
 
     @NotNull(message = "Price is required")
     @Positive(message = "Price must be a positive value")
@@ -49,31 +49,6 @@ public class Pizza {
             inverseJoinColumns = @JoinColumn(name = "ingredient_id")
     )
     private List<Ingredient> ingredients = new ArrayList<>();
-
-    public List<Ingredient> getIngredients() {
-        return ingredients;
-    }
-
-    public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
-    }
-
-    public List<Offer> getOffers() {
-        return offers;
-    }
-
-    public void setOffers(List<Offer> offers) {
-        this.offers = offers;
-    }
-
-//
-//    public Pizza(Integer id, String name, String description, String image, BigDecimal price) {
-//        this.id = id;
-//        this.name = name;
-//        this.description = description;
-//        this.image = image;
-//        this.price = price;
-//    }
 
     public Integer getId() {
         return id;
@@ -99,11 +74,11 @@ public class Pizza {
         this.description = description;
     }
 
-    public String getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 
@@ -113,5 +88,21 @@ public class Pizza {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public List<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(List<Offer> offers) {
+        this.offers = offers;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 }

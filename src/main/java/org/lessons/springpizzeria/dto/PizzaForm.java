@@ -16,11 +16,12 @@ public class PizzaForm {
     @NotBlank(message = "Name must not be null or blank")
     private String name;
 
+    @NotBlank(message = "Description must not be null or blank")
     private String description;
-    @NotBlank(message = "URL must not be null or blank")
-    private String image;
+//    @NotBlank(message = "URL must not be null or blank")
+//    private String image;
 
-    private MultipartFile coverFile;
+    private MultipartFile image;
     @NotNull(message = "Price is required")
     @Positive(message = "Price must be a positive value")
     private BigDecimal price;
@@ -51,20 +52,12 @@ public class PizzaForm {
         this.description = description;
     }
 
-    public String getImage() {
+    public MultipartFile getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(MultipartFile image) {
         this.image = image;
-    }
-
-    public MultipartFile getCoverFile() {
-        return coverFile;
-    }
-
-    public void setCoverFile(MultipartFile coverFile) {
-        this.coverFile = coverFile;
     }
 
     public BigDecimal getPrice() {
