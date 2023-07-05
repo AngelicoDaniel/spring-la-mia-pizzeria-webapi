@@ -4,6 +4,7 @@ package org.lessons.springpizzeria.api;
 import jakarta.validation.Valid;
 import org.lessons.springpizzeria.exceptions.PizzaNotFoundException;
 import org.lessons.springpizzeria.model.Pizza;
+import org.lessons.springpizzeria.repository.PizzaRepository;
 import org.lessons.springpizzeria.service.PizzaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,9 @@ import java.util.Optional;
 public class PizzaRestController {
 
     @Autowired
-    PizzaService pizzaService;
+    private PizzaRepository pizzaRepository;
+    @Autowired
+    private PizzaService pizzaService;
 
 
     @GetMapping

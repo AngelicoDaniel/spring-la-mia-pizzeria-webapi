@@ -33,10 +33,11 @@ public class Pizza {
     @Positive(message = "Price must be a positive value")
     private BigDecimal price;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "pizza", cascade = {CascadeType.REMOVE})
     private List<Offer> offers = new ArrayList<>();
 
-    @JsonIgnore
+
     @ManyToMany
     @JoinTable(name = "pizza_ingredients",
             joinColumns = @JoinColumn(name = "pizza_id"),

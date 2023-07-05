@@ -11,18 +11,17 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfiguration {
-    /* per definire un AuthenticationProvider ho bisogno di:
-   - uno UserDetailsService
-   - un PasswordEncoder
-  */
-    // questo è lo UserDetailsService
+    // per definire un authentication provider ho bisogno di :
+    // -uno userDetailsService
+    // -un password encoder
+
+    // questo è lo userDetailsService
     @Bean
     DatabaseUserDetailsService userDetailsService() {
         return new DatabaseUserDetailsService();
     }
 
-    // questo è il PasswordEncoder (che deduce l'algoritmo di encoding da una stringa nella password
-    // stessa)
+    // questo è password encoder (che deduce l'algoritmo di encoding da una stringa nella password stessa)
     @Bean
     PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -30,40 +29,33 @@ public class SecurityConfiguration {
 
     @Bean
     DaoAuthenticationProvider authenticationProvider() {
-        // creo l'authenticationProvider
+        // creo authenticationProvider
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        // gli setto il PasswordEncoder
+        // setto il passwordEncoder
         provider.setPasswordEncoder(passwordEncoder());
-        // gli setto lo UserDetailsService
+        // setto lo UserDetailsService
         provider.setUserDetailsService(userDetailsService());
         return provider;
-
     }
 
-    /*
-* /offer solo ADMIN
-* /pizzas, /pizzas/{id} ADMIN e USER
-* /pizzas/edit/** ADMIN
-* /pizzas/create ADMIN
- /ingredients/** ADMIN
-*/
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // definisco la catena di filtri
         http.authorizeHttpRequests()
-                .requestMatchers("/api/**").permitAll() //per far funzionare le API
-                .requestMatchers(HttpMethod.POST).hasAuthority("ADMIN")
-                .requestMatchers("/pizzas/create").hasAuthority("ADMIN")
-                .requestMatchers("/pizzas/edit/**").hasAuthority("ADMIN")
+                .requestMatchers("/pizzas").permitAll()
                 .requestMatchers("/ingredients").hasAuthority("ADMIN")
-                .requestMatchers("/offers/**").hasAuthority("ADMIN")
-                .requestMatchers("/pizzas").hasAnyAuthority("ADMIN", "USER")
+                .requestMatchers("/pizzas/edit/**").hasAuthority("ADMIN")
+                .requestMatchers("/pizzas/edit/**").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/pizzas/**").hasAuthority("ADMIN")
                 .requestMatchers("/pizzas/**").hasAnyAuthority("ADMIN", "USER")
-                .requestMatchers(("/**")).permitAll()
+                .requestMatchers("/offers/**").hasAuthority("ADMIN")
+                .requestMatchers("/**").permitAll()
                 .and().formLogin()
                 .and().logout();
-
-
+        // disabilitiamo csrf per invocare postman
         http.csrf().disable();
         return http.build();
+
     }
+
 }
